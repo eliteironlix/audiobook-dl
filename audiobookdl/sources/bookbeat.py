@@ -28,6 +28,24 @@ class BookBeatSource(Source):
             + " "
             + base64.b64encode(b"Personal Computer").decode()
         )
+        
+        
+    def verify_ip(self) -> bool:
+        headers = {
+            "bb_market": "pl",
+            "bb-trace-id": "3a3fb2cc-bd7e-45cd-9c8e-10fe89e904be",
+            "Accept": "application/json",
+        }
+        response = self.get("https://www.bookbeat.pl/api/user/verifyIp", headers=headers)
+        if response.status_code == 200:
+            result = response.json()
+            return result  # Zwracamy True lub False na podstawie odpowiedzi API
+        return False  # Zwracamy False, jeśli wystąpił błąd lub inny status niż 200
+
+    def _login(self, url: str, username: str, password: str):
+        # Sprawdzenie weryfikacji adresu IP
+        if not self.verify_ip():
+            raise Exception("Adres IP nie został zweryfikowany")
 
     def _login(self, url: str, username: str, password: str):
         headers = {
