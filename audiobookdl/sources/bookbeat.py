@@ -38,13 +38,13 @@ class BookBeatSource(Source):
         self._session.headers = headers
         login_json = {"username": username, "password": password}
         tokens = self.post_json(
-            "https://api.bookbeat.com/api/login",
+            "https://www.bookbeat.pl/api/login",
             json=login_json
         )
         token = tokens["token"]
         self._session.headers.update({"authorization": f"Bearer {token}"})
         self.saved_books = self.get_json(
-            "https://api.bookbeat.com/api/my/books/saved?offset=0&limit=100"
+            "https://api.bookbeat.com/api/my/books/saved?offset=0&limit=50"
         )
 
 
